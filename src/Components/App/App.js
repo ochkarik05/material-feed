@@ -18,11 +18,18 @@ class App extends Component {
             modalOpen: false,
         });
 
+    handleSignOut = () => {
+        this.props.firebase.signOut();
+    };
+
     render() {
 
         return <>
 
-            <Header onSignClick={this.handleOpen}/>
+            <Header
+                onSignInClick={this.handleOpen}
+                onSignOutClick={this.handleSignOut}
+            />
 
             <Articles/>
 

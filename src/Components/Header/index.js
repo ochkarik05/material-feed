@@ -3,8 +3,10 @@ import {
     AppBar,
     Typography,
     Toolbar,
-    Button, withStyles,
+    withStyles,
 } from '@material-ui/core';
+
+import SignButton from './../SignButton';
 
 const styles = {
     root: {
@@ -19,7 +21,7 @@ const styles = {
     },
 };
 
-const HeaderBase = ({classes, onSignClick}) =>
+const HeaderBase = ({classes, onSignInClick, onSignOutClick}) =>
 
     <div className={classes.root}>
         <AppBar position="static" color="default">
@@ -28,7 +30,13 @@ const HeaderBase = ({classes, onSignClick}) =>
                     {console.log(classes)}
                     Firebase News Feed
                 </Typography>
-                <Button color="inherit" onClick={onSignClick}>Login</Button>
+                <SignButton
+                    color="inherit"
+                    onSignOutClick={onSignOutClick}
+                    onSignInClick={onSignInClick}>
+
+                    Login
+                </SignButton>
             </Toolbar>
         </AppBar>
     </div>;

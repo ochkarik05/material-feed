@@ -11,7 +11,6 @@ const config = {
     messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
 };
 
-
 const settings = {timestampsInSnapshots: true};
 
 export default class {
@@ -23,10 +22,9 @@ export default class {
         this.dp.settings(settings);
     }
 
-
     signOut = () => this.auth.signOut().then(() => {
         console.log('Signed Out');
     });
 
-    signIn = () => Promise.resolve({userName: "Vasya"})
+    signIn = (email, password) => this.auth.signInWithEmailAndPassword(email, password);
 }
