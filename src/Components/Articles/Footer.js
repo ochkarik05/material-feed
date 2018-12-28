@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Paper, Tabs, Tab} from '@material-ui/core';
 
-export default (props) =>
+export default () =>
     <Paper elevation={1}><Tabs
         value={0}
         // onChange={this.handleChange}

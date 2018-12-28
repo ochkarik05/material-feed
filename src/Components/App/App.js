@@ -1,18 +1,38 @@
 import React, {Component} from 'react';
 import Header from '../Header';
-import Footer from '../Footer';
 import Articles from '../Articles';
+import withAuthentication from '../Session/withAuthentication';
+import SignIn from './../SignIn'
 
-export default class extends Component {
+class App extends Component {
+
+    state = {
+        modalOpen: true,
+    };
+
+    handleOpen = () => this.setState({
+            modalOpen: true,
+        });
+
+    handleClose = () => this.setState({
+            modalOpen: false,
+        });
 
     render() {
+
         return <>
+
             <Header/>
 
             <Articles/>
 
-            <Footer/>
-        </>;
+            <SignIn open={this.state.modalOpen} onClose={this.handleClose}/>
+
+        </>
+
+        ;
     }
 
 }
+
+export default withAuthentication(App)
