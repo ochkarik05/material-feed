@@ -7,7 +7,7 @@ import SignIn from './../SignIn'
 class App extends Component {
 
     state = {
-        modalOpen: true,
+        modalOpen: false,
     };
 
     handleOpen = () => this.setState({
@@ -22,15 +22,13 @@ class App extends Component {
 
         return <>
 
-            <Header/>
+            <Header onSignClick={this.handleOpen}/>
 
             <Articles/>
 
             <SignIn open={this.state.modalOpen} onClose={this.handleClose}/>
 
         </>
-
-        ;
     }
 
 }

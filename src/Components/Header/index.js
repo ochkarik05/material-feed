@@ -19,7 +19,7 @@ const styles = {
     },
 };
 
-const HeaderBase = ({classes}) =>
+const HeaderBase = ({classes, onSignClick}) =>
 
     <div className={classes.root}>
         <AppBar position="static" color="default">
@@ -28,7 +28,7 @@ const HeaderBase = ({classes}) =>
                     {console.log(classes)}
                     Firebase News Feed
                 </Typography>
-                <Button color="inherit">Login</Button>
+                <Button color="inherit" onClick={onSignClick}>Login</Button>
             </Toolbar>
         </AppBar>
     </div>;
