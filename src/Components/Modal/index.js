@@ -9,6 +9,6 @@ export default Component => ({onClose, open, ...props}) =>
         open={open}
         onClose={onClose}
     >
-        <Component {...props}/>
+        <Component {...props} onClose={onClose}/>
     </Modal>
 

@@ -7,7 +7,15 @@ import {
     withStyles,
 } from '@material-ui/core';
 
-import withModal from './../Modal'
+import withModal from './../Modal';
+import {withFirebase} from '../Firebase';
+import {compose} from 'recompose';
+
+const INITIAL_STATE = {
+    email: '',
+    password: '',
+    error: null,
+};
 
 const styles = theme => ({
 
@@ -32,44 +40,101 @@ const styles = theme => ({
     }
 );
 
-const SignInForm = ({onClose, open, classes}) => (
+class SignInForm extends React.Component {
 
-        <Paper className={classes.paper}>
-            <form>
-                <Typography variant="h6" id="modal-title">
-                    Welcome to our place
-                </Typography>
-                <Typography variant="subtitle1" id="simple-modal-description">
-                    Enter your credentials to continue as editor
-                </Typography>
+    state = {...INITIAL_STATE};
 
-                <TextField
-                    id="outlined-email-input"
-                    label="Email"
-                    className={classes.textField}
-                    type="email"
-                    name="email"
-                    autoComplete="email"
-                    margin="normal"
-                    variant="outlined"
-                />
-                <TextField
-                    id="outlined-password-input"
-                    label="Password"
-                    className={classes.textField}
-                    type="password"
-                    autoComplete="current-password"
-                    margin="normal"
-                    variant="outlined"
-                />
-                <Button color="primary" className={classes.button}>
-                    Login
-                </Button>
-            </form>
-        </Paper>
+    onSubmit = (e) => {
 
-);
+        e.preventDefault();
 
-const ModalSignIn = withModal(SignInForm);
+        const {email, password} = this.state;
 
-export default withStyles(styles)(ModalSignIn);
+        const {onClose} = this.props;
+
+        this.props.firebase.signIn(email, password)
+            .then(authUser => {
+                console.log(authUser);
+                this.setState({...INITIAL_STATE});
+                onClose();
+
+            })
+            .catch(error => {
+                this.setState({error});
+            });
+    };
+
+
+    onChange = event => {
+
+        this.setState({
+            [event.target.name]: event.target.value,
+        });
+
+    };
+
+
+    render() {
+        const {classes} = this.props;
+
+        const {
+            password,
+            email,
+            error,
+        } = this.state;
+
+        const isInvalid =
+            email === '' ||
+            password === '';
+
+        return (
+
+            <Paper className={classes.paper}>
+                <form onSubmit={this.onSubmit}>
+                    <Typography variant="h6" id="modal-title">
+                        Welcome to our place
+                    </Typography>
+                    <Typography variant="subtitle1" id="simple-modal-description">
+                        Enter your credentials to continue as editor
+                    </Typography>
+
+                    <TextField
+                        id="outlined-email-input"
+                        label="Email"
+                        className={classes.textField}
+                        type="email"
+                        name="email"
+                        autoComplete="email"
+                        onChange={this.onChange}
+                        value={email}
+                        margin="normal"
+                        variant="outlined"
+                    />
+                    <TextField
+                        id="outlined-password-input"
+                        label="Password"
+                        className={classes.textField}
+                        type="password"
+                        name="password"
+                        autoComplete="current-password"
+                        onChange={this.onChange}
+                        value={password}
+                        margin="normal"
+                        variant="outlined"
+                    />
+                    {error && <p>{error.message}</p>}
+                    <Button type="submit" color="primary" className={classes.button} disabled={isInvalid}>
+                        Login
+                    </Button>
+                </form>
+            </Paper>
+
+        );
+    }
+}
+
+export default compose(
+    withStyles(styles),
+    withModal,
+    withFirebase
+    )(SignInForm);

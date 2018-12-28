@@ -27,4 +27,6 @@ export default class {
     signOut = () => this.auth.signOut().then(() => {
         console.log('Signed Out');
     });
+
+    signIn = () => Promise.resolve({userName: "Vasya"})
 }
