@@ -1,12 +1,13 @@
 import React from 'react';
 import {
-    Modal,
     Typography,
     Paper,
     TextField,
     Button,
     withStyles,
 } from '@material-ui/core';
+
+import withModal from './../Modal'
 
 const styles = theme => ({
 
@@ -32,13 +33,6 @@ const styles = theme => ({
 );
 
 const SignInForm = ({onClose, open, classes}) => (
-
-    <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={open}
-        onClose={onClose}
-    >
 
         <Paper className={classes.paper}>
             <form>
@@ -73,8 +67,9 @@ const SignInForm = ({onClose, open, classes}) => (
                 </Button>
             </form>
         </Paper>
-    </Modal>
 
 );
 
-export default withStyles(styles)(SignInForm);
+const ModalSignIn = withModal(SignInForm);
+
+export default withStyles(styles)(ModalSignIn);
