@@ -109,6 +109,8 @@ class SignInForm extends React.Component {
                         value={email}
                         margin="normal"
                         variant="outlined"
+                        autoFocus
+
                     />
                     <TextField
                         id="outlined-password-input"
@@ -123,7 +125,12 @@ class SignInForm extends React.Component {
                         variant="outlined"
                     />
                     {error && <p>{error.message}</p>}
-                    <Button type="submit" color="primary" className={classes.button} disabled={isInvalid}>
+                    <Button
+                        type="submit"
+                        color="primary"
+                        className={classes.button}
+                        disabled={isInvalid}
+                    >
                         Login
                     </Button>
                 </form>
