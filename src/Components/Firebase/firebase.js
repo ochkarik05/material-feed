@@ -28,5 +28,6 @@ export default class {
 
     signIn = (email, password) => this.auth.signInWithEmailAndPassword(email, password);
 
-    getCategories = () => this.db.collection('categories').get()
+    getCategories = () => this.db.collection('categories').get();
+    getArticles = (ref) => ref.get();
 }
