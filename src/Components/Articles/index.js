@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid} from '@material-ui/core';
+import {Grid, List, ListItem, ListItemText} from '@material-ui/core';
 import LeftPanel from './LeftPanel';
 import RightPanel from './RightPanel';
 import Footer from './Footer';
@@ -9,7 +9,6 @@ import * as PropTypes from 'prop-types';
 
 const style = {
     Paper: {
-        padding: '1.3em',
         marginTop: '0.8em',
         marginBottom: '0.8em',
         height: 400,
@@ -49,13 +48,14 @@ class Articles extends React.Component {
                     <Grid container spacing={16}>
                         <Grid item sm>
                             <LeftPanel style={style}>
-                                <ul>
+                                <List component="nav">
                                     {
-                                        this.state.articles.map(item =>
-                                            <li key={item.id}>{item.title}</li>)
-                                    }
 
-                                </ul>
+                                        this.state.articles.map(item => <ListItem key={item.id} button>
+                                            <ListItemText primary={item.title}/>
+                                        </ListItem>)
+                                    }
+                                </List>
                             </LeftPanel>
                         </Grid>
                         <Grid item sm>
