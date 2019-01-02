@@ -18,8 +18,8 @@ export default class {
         app.initializeApp(config);
         this.auth = app.auth();
         this.app = app;
-        this.dp = app.firestore();
-        this.dp.settings(settings);
+        this.db = app.firestore();
+        this.db.settings(settings);
     }
 
     signOut = () => this.auth.signOut().then(() => {
@@ -27,4 +27,6 @@ export default class {
     });
 
     signIn = (email, password) => this.auth.signInWithEmailAndPassword(email, password);
+
+    getCategories = () => this.db.collection('categories').get()
 }

@@ -18,8 +18,7 @@ export default () => <AuthUserContext.Consumer>
         return <><Grid container spacing={16}>
             <Grid item sm>
                 <LeftPanel style={style}>
-                    {authUser ? authUser.name : 'Unauthorized'}
-                    {authUser && authUser.toString()}
+                    {authUser ? authUser.name || authUser.email : 'Unauthorized'}
                 </LeftPanel>
             </Grid>
             <Grid item sm>
