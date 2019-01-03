@@ -6,65 +6,59 @@ import Footer from './Footer';
 import {AuthUserContext} from './../Session';
 import {withFirebase} from '../Firebase';
 import * as PropTypes from 'prop-types';
+import './Article.css';
 
 const style = {
     Paper: {
         marginTop: '0.8em',
         marginBottom: '0.8em',
-        height: 400,
+        height: 500,
+        overflow: 'auto',
     },
+
 };
 
 class Articles extends React.Component {
 
-    state = {
-        articles: [],
-    };
-
-    onCategorySelected = category => {
-
-        category.records.collection('records').get().then(snapshot => {
-
-            const articles = [];
-
-            snapshot.forEach(doc => {
-                let item = {id: doc.id, ...doc.data()};
-                articles.push(item);
-            });
-
-            this.setState({
-                articles,
-            });
-
-        });
-
-    };
+    createMarkup = (content) => ({
+        __html: content,
+    });
 
     render() {
+
+        const {
+            categoryArticles,
+            onArticleSelected,
+            articleContent: {text} = {text: 'Select article from the left'},
+        } = this.props;
+
+        console.log(text);
+
         return <AuthUserContext.Consumer>
             {authUser => {
                 console.log(authUser);
                 return <>
-                    <Grid container spacing={16}>
-                        <Grid item sm>
+                    <Grid container spacing={16} wrap={'nowrap'}>
+                        <Grid item xs={2}>
                             <LeftPanel style={style}>
                                 <List component="nav">
                                     {
-
-                                        this.state.articles.map(item => <ListItem key={item.id} button>
-                                            <ListItemText primary={item.title}/>
-                                        </ListItem>)
+                                        categoryArticles.map(item =>
+                                            <ListItem key={item.id} button onClick={() => onArticleSelected(item)}>
+                                                <ListItemText primary={item.title}/>
+                                            </ListItem>)
                                     }
                                 </List>
                             </LeftPanel>
                         </Grid>
-                        <Grid item sm>
+                        <Grid item xs={10}>
                             <RightPanel style={style}>
-                                Select article from the left
+                                <div className='article-content' dangerouslySetInnerHTML={this.createMarkup(text)}/>
                             </RightPanel>
                         </Grid>
                     </Grid>
-                    < Footer onTabSelected={this.onCategorySelected}/>
+
+                    < Footer {...this.props}/>
                 </>;
             }
             }
@@ -75,6 +69,12 @@ class Articles extends React.Component {
 
 Articles.propTypes = {
     firebase: PropTypes.object.isRequired,
+    categories: PropTypes.array.isRequired,
+    onCategorySelected: PropTypes.func.isRequired,
+    category: PropTypes.object,
+    categoryArticles: PropTypes.array,
+    onArticleSelected: PropTypes.func.isRequired,
+    articleContent: PropTypes.object,
 };
 
 export default withFirebase(Articles);

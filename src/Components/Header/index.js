@@ -7,8 +7,9 @@ import {
 } from '@material-ui/core';
 
 import SignButton from './../SignButton';
+import AddArticle from './../AddArticle'
 
-const styles = {
+const styles = () => ({
     root: {
         flexGrow: 1,
     },
@@ -19,7 +20,7 @@ const styles = {
         marginLeft: -12,
         marginRight: 20,
     },
-};
+});
 
 const HeaderBase = ({classes, onSignInClick, onSignOutClick}) =>
 
@@ -30,6 +31,9 @@ const HeaderBase = ({classes, onSignInClick, onSignOutClick}) =>
                     {console.log(classes)}
                     Firebase News Feed
                 </Typography>
+
+                <AddArticle/>
+
                 <SignButton
                     color="inherit"
                     onSignOutClick={onSignOutClick}

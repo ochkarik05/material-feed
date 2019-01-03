@@ -1,52 +1,28 @@
 import React from 'react';
 import {Paper, Tabs, Tab} from '@material-ui/core';
-import {withFirebase} from '../Firebase';
 import PropTypes from 'prop-types';
 
 class Footer extends React.Component {
 
-    state = {
-        categories: [],
-        value: 0,
-    };
-
-    componentDidMount() {
-
-        this.props.firebase.getCategories().then(snapshot => {
-            const categories = [];
-
-            snapshot.forEach(doc => {
-                let item = {id: doc.id, ...doc.data()};
-                categories.push(item);
-            });
-
-            console.log(categories);
-
-            this.setState({
-                categories: categories,
-                value: 0,
-            });
-
-            this.props.onTabSelected(categories[0]);
-
-        });
-    }
-
     handleChange = (event, value) => {
-        this.props.onTabSelected(this.state.categories[value]);
-        this.setState({value});
+        this.props.onCategorySelected(this.props.categories[value]);
     };
 
     render() {
+
+        const {categories, category} = this.props;
+
+        const cellIndex = categories.findIndex(cat => cat === category);
+
         return <Paper elevation={1}>
             <Tabs
-                value={this.state.value}
+                value={cellIndex}
                 onChange={this.handleChange}
                 indicatorColor="primary"
                 textColor="primary"
                 centered
             >
-                {this.state.categories.map(
+                {categories && categories.map(
                     cat => <Tab key={cat.id} label={cat.title}/>,
                 )}
             </Tabs>
@@ -56,8 +32,10 @@ class Footer extends React.Component {
 }
 
 Footer.propTypes = {
-    firebase: PropTypes.object.isRequired,
-    onTabSelected: PropTypes.func.isRequired,
+    // firebase: PropTypes.object.isRequired,
+    onCategorySelected: PropTypes.func.isRequired,
+    categories: PropTypes.array.isRequired,
+    currentCategory: PropTypes.object
 };
 
-export default withFirebase(Footer);
+export default Footer;
