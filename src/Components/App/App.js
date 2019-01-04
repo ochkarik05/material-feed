@@ -8,20 +8,7 @@ import * as PropTypes from 'prop-types';
 class App extends Component {
 
     state = {
-        modalOpen: false,
         categories: [],
-    };
-
-    handleOpen = () => this.setState({
-        modalOpen: true,
-    });
-
-    handleModalClose = () => this.setState({
-        modalOpen: false,
-    });
-
-    handleSignOut = () => {
-        this.props.firebase.signOut();
     };
 
     componentDidMount() {
@@ -62,7 +49,6 @@ class App extends Component {
 
                 this.setState({
                     articles: articles,
-                    // articleContent: undefined
                 });
 
             });
@@ -99,7 +85,6 @@ class App extends Component {
             currentCategory,
             articles = [],
             articleContent,
-            modalOpen,
         } = this.state;
 
         return <>
@@ -117,8 +102,6 @@ class App extends Component {
                 onArticleSelected={this.onArticleSelected}
                 articleContent={articleContent}
             />
-
-            <SignIn open={modalOpen} onClose={this.handleModalClose}/>
 
         </>;
     }

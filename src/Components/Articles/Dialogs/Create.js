@@ -1,11 +1,18 @@
 import React, {Component} from 'react';
 import {
-    Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    TextField,
+    DialogActions,
+    Button,
 } from '@material-ui/core';
 
 import AddArticle from './../../AddArticle';
+import {withFirebase} from '../../Firebase';
 
-export default class extends Component {
+export default withFirebase(class extends Component {
 
     state = {
         open: false,
@@ -16,6 +23,20 @@ export default class extends Component {
             content: '',
             category: '',
         },
+    };
+
+    onEnter = () =>  {
+        this.props.firebase.getCategories().then(snapshot => {
+
+            const categories = [];
+
+            snapshot.forEach(doc => {
+                let item = {id: doc.id, ...doc.data()};
+                categories.push(item);
+            });
+            console.log("Categories");
+            console.log(categories);
+        });
     };
 
     handleChange = (name) => ({target: {value}}) => {
@@ -57,6 +78,7 @@ export default class extends Component {
                 open={open}
                 onClose={this.handleToggle}
                 aria-labelledby="form-dialog-title"
+                onEnter={this.onEnter}
             >
                 <DialogTitle id="form-dialog-title">Add article</DialogTitle>
                 <DialogContent>
@@ -116,4 +138,4 @@ export default class extends Component {
         </>;
     }
 
-}
+});
