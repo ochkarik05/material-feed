@@ -4,11 +4,13 @@ import Articles from '../Articles';
 import withAuthentication from '../Session/withAuthentication';
 import SignIn from './../SignIn';
 import * as PropTypes from 'prop-types';
+import Create from './../Articles/Dialogs/Create'
 
 class App extends Component {
 
     state = {
         modalOpen: false,
+        createDialogOpen: false,
         categories: [],
     };
 
@@ -16,12 +18,20 @@ class App extends Component {
         modalOpen: true,
     });
 
-    handleClose = () => this.setState({
+    handleModalClose = () => this.setState({
         modalOpen: false,
     });
 
     handleSignOut = () => {
         this.props.firebase.signOut();
+    };
+
+    handleCreate = () => {
+        this.setState({createDialogOpen: true})
+    };
+
+    handleCloseCreate = () => {
+        this.setState({createDialogOpen: false})
     };
 
     componentDidMount() {
@@ -98,7 +108,9 @@ class App extends Component {
             categories,
             currentCategory,
             articles = [],
-            articleContent
+            articleContent,
+            modalOpen,
+            createDialogOpen
         } = this.state;
 
         return <>
@@ -106,6 +118,7 @@ class App extends Component {
             <Header
                 onSignInClick={this.handleOpen}
                 onSignOutClick={this.handleSignOut}
+                onCreateClick={this.handleCreate}
             />
 
             <Articles
@@ -117,7 +130,9 @@ class App extends Component {
                 articleContent={articleContent}
             />
 
-            <SignIn open={this.state.modalOpen} onClose={this.handleClose}/>
+            <SignIn open={modalOpen} onClose={this.handleModalClose}/>
+
+            <Create open={createDialogOpen} onClose={this.handleCloseCreate}/>
 
         </>;
     }
