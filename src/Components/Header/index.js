@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core';
 
 import SignButton from './../SignButton';
-import AddArticle from './../AddArticle'
+import Create from './../Articles/Dialogs/Create'
 
 const styles = () => ({
     root: {
@@ -32,7 +32,7 @@ const HeaderBase = ({classes, onSignInClick, onSignOutClick, onCreateClick}) =>
                     Firebase News Feed
                 </Typography>
 
-                <AddArticle onClick={onCreateClick}/>
+                <Create />
 
                 <SignButton
                     color="inherit"
