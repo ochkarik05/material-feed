@@ -6,7 +6,7 @@ import {
     withStyles,
 } from '@material-ui/core';
 
-import SignButton from './../SignButton';
+import SignIn from './../SignIn';
 import Create from './../Articles/Dialogs/Create'
 
 const styles = () => ({
@@ -22,7 +22,7 @@ const styles = () => ({
     },
 });
 
-const HeaderBase = ({classes, onSignInClick, onSignOutClick, onCreateClick}) =>
+const HeaderBase = ({ classes }) =>
 
     <div className={classes.root}>
         <AppBar position="static" color="default">
@@ -34,13 +34,8 @@ const HeaderBase = ({classes, onSignInClick, onSignOutClick, onCreateClick}) =>
 
                 <Create />
 
-                <SignButton
-                    color="inherit"
-                    onSignOutClick={onSignOutClick}
-                    onSignInClick={onSignInClick}>
+                <SignIn />
 
-                    Login
-                </SignButton>
             </Toolbar>
         </AppBar>
     </div>;
