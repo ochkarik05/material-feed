@@ -80,8 +80,12 @@ class App extends Component {
             article: selectedArticle,
         }), () => {
             selectedArticle.content.get().then(content => {
+
+                const text = content.data().text.replace(/\\n/g, '\n');
+                // console.log(text);
+
                 this.setState({
-                    articleContent: content.data(),
+                    articleContent: {text: text},
                 });
             });
         });

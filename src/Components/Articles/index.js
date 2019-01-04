@@ -7,6 +7,7 @@ import {AuthUserContext} from './../Session';
 import {withFirebase} from '../Firebase';
 import * as PropTypes from 'prop-types';
 import './Article.css';
+import ReactMarkdown from 'react-markdown';
 
 const style = {
     Paper: {
@@ -53,7 +54,10 @@ class Articles extends React.Component {
                         </Grid>
                         <Grid item xs={10}>
                             <RightPanel style={style}>
-                                <div className='article-content' dangerouslySetInnerHTML={this.createMarkup(text)}/>
+                                <ReactMarkdown
+                                    source={text}
+                                    className="article-content"
+                                />
                             </RightPanel>
                         </Grid>
                     </Grid>
@@ -78,3 +82,4 @@ Articles.propTypes = {
 };
 
 export default withFirebase(Articles);
+;
