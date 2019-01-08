@@ -1,6 +1,6 @@
-import app from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/firestore'
+import app from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
 
 const config = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -11,10 +11,11 @@ const config = {
     messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
 };
 
+
 const settings = {timestampsInSnapshots: true};
 
 export default class {
-    constructor(){
+    constructor() {
         app.initializeApp(config);
         this.auth = app.auth();
         this.app = app;
@@ -30,4 +31,27 @@ export default class {
 
     getCategories = () => this.db.collection('categories').get();
     getArticles = (ref) => ref.get();
+
+    addCategory = (categoryName) => {
+        const ref = this.db.collection('records').doc();
+        return this.db.collection('categories').doc(ref.id).set({
+            title: categoryName,
+            records: ref,
+        }).then(() => ref.id);
+    };
+
+    saveArticle = (categoryId, title, image, description, content) => {
+        const {db} = this;
+        return db.collection('articlesContent').add({text: content})
+            .then(docRef =>
+                db.collection('records')
+                    .doc(categoryId).collection('records')
+                    .add({
+                        title: title,
+                        description: description,
+                        image: image,
+                        content: docRef,
+                    }))
+
+    };
 }
