@@ -6,8 +6,9 @@ import {
     withStyles,
 } from '@material-ui/core';
 
-import SignButton from './../SignButton';
-import AddArticle from './../AddArticle'
+import SignIn from './../SignIn';
+import Create from './../Articles/Dialogs/Create'
+import * as PropTypes from 'prop-types';
 
 const styles = () => ({
     root: {
@@ -22,7 +23,7 @@ const styles = () => ({
     },
 });
 
-const HeaderBase = ({classes, onSignInClick, onSignOutClick}) =>
+const HeaderBase = ({ classes, onArticleCreate }) =>
 
     <div className={classes.root}>
         <AppBar position="static" color="default">
@@ -32,17 +33,16 @@ const HeaderBase = ({classes, onSignInClick, onSignOutClick}) =>
                     Firebase News Feed
                 </Typography>
 
-                <AddArticle/>
+                <Create onArticleCreate={onArticleCreate}/>
 
-                <SignButton
-                    color="inherit"
-                    onSignOutClick={onSignOutClick}
-                    onSignInClick={onSignInClick}>
+                <SignIn />
 
-                    Login
-                </SignButton>
             </Toolbar>
         </AppBar>
     </div>;
+
+HeaderBase.propTypes = {
+    onArticleCreate: PropTypes.func.isRequired
+};
 
 export default withStyles(styles)(HeaderBase);

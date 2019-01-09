@@ -4,10 +4,10 @@ import {
     Paper,
     TextField,
     Button,
+    Modal,
     withStyles,
 } from '@material-ui/core';
-
-import withModal from './../Modal';
+import SignButton from './SignButton';
 import {withFirebase} from '../Firebase';
 import {compose} from 'recompose';
 
@@ -15,6 +15,7 @@ const INITIAL_STATE = {
     email: '',
     password: '',
     error: null,
+    open: false,
 };
 
 const styles = theme => ({
@@ -65,6 +66,19 @@ class SignInForm extends React.Component {
     };
 
 
+    handleToggle = () => {
+
+        this.setState(prev => ({
+            open: !prev.open,
+        }));
+
+    };
+
+
+    handleSignOut = () => {
+        this.props.firebase.signOut();
+    };
+
     onChange = event => {
 
         this.setState({
@@ -73,7 +87,6 @@ class SignInForm extends React.Component {
 
     };
 
-
     render() {
         const {classes} = this.props;
 
@@ -81,6 +94,7 @@ class SignInForm extends React.Component {
             password,
             email,
             error,
+            open,
         } = this.state;
 
         const isInvalid =
@@ -89,52 +103,67 @@ class SignInForm extends React.Component {
 
         return (
 
-            <Paper className={classes.paper}>
-                <form onSubmit={this.onSubmit}>
-                    <Typography variant="h6" id="modal-title">
-                        Welcome to our place
-                    </Typography>
-                    <Typography variant="subtitle1" id="simple-modal-description">
-                        Enter your credentials to continue as editor
-                    </Typography>
+            <>
+                <SignButton
+                    color="inherit"
+                    onSignOutClick={this.handleSignOut}
+                    onSignInClick={this.handleToggle}/>
 
-                    <TextField
-                        id="outlined-email-input"
-                        label="Email"
-                        className={classes.textField}
-                        type="email"
-                        name="email"
-                        autoComplete="email"
-                        onChange={this.onChange}
-                        value={email}
-                        margin="normal"
-                        variant="outlined"
-                        autoFocus
+                <Modal
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                    open={open}
+                    onClose={this.handleToggle}
+                >
 
-                    />
-                    <TextField
-                        id="outlined-password-input"
-                        label="Password"
-                        className={classes.textField}
-                        type="password"
-                        name="password"
-                        autoComplete="current-password"
-                        onChange={this.onChange}
-                        value={password}
-                        margin="normal"
-                        variant="outlined"
-                    />
-                    {error && <p>{error.message}</p>}
-                    <Button
-                        type="submit"
-                        color="primary"
-                        className={classes.button}
-                        disabled={isInvalid}
-                    >
-                        Login
-                    </Button>
-                </form>
-            </Paper>
+                    <Paper className={classes.paper}>
+                        <form onSubmit={this.onSubmit}>
+                            <Typography variant="h6" id="modal-title">
+                                Welcome to our place
+                            </Typography>
+                            <Typography variant="subtitle1" id="simple-modal-description">
+                                Enter your credentials to continue as editor
+                            </Typography>
+
+                            <TextField
+                                id="outlined-email-input"
+                                label="Email"
+                                className={classes.textField}
+                                type="email"
+                                name="email"
+                                autoComplete="email"
+                                onChange={this.onChange}
+                                value={email}
+                                margin="normal"
+                                variant="outlined"
+                                autoFocus
+
+                            />
+                            <TextField
+                                id="outlined-password-input"
+                                label="Password"
+                                className={classes.textField}
+                                type="password"
+                                name="password"
+                                autoComplete="current-password"
+                                onChange={this.onChange}
+                                value={password}
+                                margin="normal"
+                                variant="outlined"
+                            />
+                            {error && <p>{error.message}</p>}
+                            <Button
+                                type="submit"
+                                color="primary"
+                                className={classes.button}
+                                disabled={isInvalid}
+                            >
+                                Login
+                            </Button>
+                        </form>
+                    </Paper>
+                </Modal>
+            </>
 
         );
     }
@@ -142,6 +171,5 @@ class SignInForm extends React.Component {
 
 export default compose(
     withStyles(styles),
-    withModal,
-    withFirebase
-    )(SignInForm);
+    withFirebase,
+)(SignInForm);

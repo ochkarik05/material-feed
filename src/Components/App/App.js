@@ -2,30 +2,23 @@ import React, {Component} from 'react';
 import Header from '../Header';
 import Articles from '../Articles';
 import withAuthentication from '../Session/withAuthentication';
-import SignIn from './../SignIn';
+import {compose} from 'recompose';
 import * as PropTypes from 'prop-types';
+import {withErrorBoundaries} from '../ErrorBoundary';
 
 class App extends Component {
 
     state = {
-        modalOpen: false,
         categories: [],
     };
 
-    handleOpen = () => this.setState({
-        modalOpen: true,
-    });
-
-    handleClose = () => this.setState({
-        modalOpen: false,
-    });
-
-    handleSignOut = () => {
-        this.props.firebase.signOut();
-    };
 
     componentDidMount() {
+        this.updateRecords();
 
+    }
+
+    updateRecords = (categoryId) => {
         this.props.firebase.getCategories().then(snapshot => {
             const categories = [];
 
@@ -38,13 +31,28 @@ class App extends Component {
                     categories: categories,
                 }),
                 () => {
-                    this.onCategorySelected(categories[0]);
+                    if (categories.length > 0) {
+
+                        console.log(categories);
+                        console.log(categoryId);
+
+                        const index = categories.findIndex(c => c.id === categoryId);
+                        console.log(index);
+                        const indexActual = (index !== -1)? index:0;
+                        console.log(indexActual);
+                        let category = categories[indexActual];
+                        this.onCategorySelected(category);
+
+                    }
                 },
             );
 
         });
+    };
 
-    }
+    handleArticleCreate = (categoryId) => {
+        this.updateRecords(categoryId)
+    };
 
     onCategorySelected = (currentCategory) => {
         this.setState(() => {
@@ -62,7 +70,6 @@ class App extends Component {
 
                 this.setState({
                     articles: articles,
-                    // articleContent: undefined
                 });
 
             });
@@ -71,17 +78,21 @@ class App extends Component {
 
     onArticleSelected = (selectedArticle) => {
 
-        const { article } = this.state;
+        const {article} = this.state;
 
-        if(article && article.id === selectedArticle.id) return;
+        if (article && article.id === selectedArticle.id) return;
 
         this.setState(() => ({
             articleContent: {text: 'Loading...'},
             article: selectedArticle,
         }), () => {
             selectedArticle.content.get().then(content => {
+
+                const text = content.data().text.replace(/\\n/g, '\n');
+                // console.log(text);
+
                 this.setState({
-                    articleContent: content.data(),
+                    articleContent: {text: text},
                 });
             });
         });
@@ -94,14 +105,13 @@ class App extends Component {
             categories,
             currentCategory,
             articles = [],
-            articleContent
+            articleContent,
         } = this.state;
 
         return <>
 
             <Header
-                onSignInClick={this.handleOpen}
-                onSignOutClick={this.handleSignOut}
+                onArticleCreate={this.handleArticleCreate}
             />
 
             <Articles
@@ -113,8 +123,6 @@ class App extends Component {
                 articleContent={articleContent}
             />
 
-            <SignIn open={this.state.modalOpen} onClose={this.handleClose}/>
-
         </>;
     }
 
@@ -124,4 +132,4 @@ App.propTypes = {
     firebase: PropTypes.object.isRequired,
 };
 
-export default withAuthentication(App);
+export default compose(withAuthentication, withErrorBoundaries)(App);
