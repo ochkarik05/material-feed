@@ -10,6 +10,7 @@ import {
     InputLabel,
     Select,
     MenuItem,
+    FormControl,
     withStyles,
 } from '@material-ui/core';
 
@@ -25,7 +26,6 @@ const styles = theme => ({
 });
 
 const WRONG_ID = '__WRONG_ID__';
-
 
 class CreateDialog extends Component {
 
@@ -46,7 +46,6 @@ class CreateDialog extends Component {
             category: this.categories[0],
         },
     };
-
 
     onEnter = () => {
 
@@ -116,11 +115,11 @@ class CreateDialog extends Component {
         }
 
         promise.then(categoryId =>
-            this.saveArticle(categoryId, title, image, description, content)
+            this.saveArticle(categoryId, title, image, description, content),
         ).then(() => {
-            this.handleToggle()
+            this.handleToggle();
         }).catch(e => {
-            console.log(e)
+            console.log(e);
         });
 
     };
@@ -130,7 +129,7 @@ class CreateDialog extends Component {
     };
 
     saveCategory = (categoryName) => {
-         return this.props.firebase.addCategory(categoryName);
+        return this.props.firebase.addCategory(categoryName);
     };
 
     render() {
@@ -163,21 +162,23 @@ class CreateDialog extends Component {
                     >
                         To add article, fill out fields below.
                     </DialogContentText>
-                    <InputLabel
-                        htmlFor="age-helper"
-                    >
-                        Category
-                    </InputLabel>
-                    <Select
-                        autoFocus
-                        value={categoryId}
-                        onChange={this.handleChange('category')}
-                        fullWidth
-                    >
-                        {this.categories.map(cat =>
-                            <MenuItem key={cat.categoryId} value={cat.categoryId}>{cat.categoryName}</MenuItem>,
-                        )}
-                    </Select>
+                    <FormControl>
+                        <InputLabel
+                            htmlFor="age-helper"
+                        >
+                            Category
+                        </InputLabel>
+                        <Select
+                            autoFocus
+                            value={categoryId}
+                            onChange={this.handleChange('category')}
+                            fullWidth
+                        >
+                            {this.categories.map(cat =>
+                                <MenuItem key={cat.categoryId} value={cat.categoryId}>{cat.categoryName}</MenuItem>,
+                            )}
+                        </Select>
+                    </FormControl>
 
                     {categoryId === WRONG_ID &&
                     <TextField

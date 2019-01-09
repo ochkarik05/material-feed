@@ -42,7 +42,7 @@ export default class {
 
     saveArticle = (categoryId, title, image, description, content) => {
         const {db} = this;
-        return db.collection('articlesContent').add({text: content})
+        return db.collection('articlesContent').add({text: content, categoryId: categoryId})
             .then(docRef =>
                 db.collection('records')
                     .doc(categoryId).collection('records')
@@ -51,6 +51,7 @@ export default class {
                         description: description,
                         image: image,
                         content: docRef,
+                        categoryId: categoryId
                     }))
 
     };

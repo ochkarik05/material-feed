@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import Header from '../Header';
 import Articles from '../Articles';
 import withAuthentication from '../Session/withAuthentication';
-import SignIn from './../SignIn';
+import {compose} from 'recompose';
 import * as PropTypes from 'prop-types';
+import {withErrorBoundaries} from '../ErrorBoundary';
 
 class App extends Component {
 
@@ -25,7 +26,9 @@ class App extends Component {
                     categories: categories,
                 }),
                 () => {
-                    this.onCategorySelected(categories[0]);
+                    if (categories.length > 0) {
+                        this.onCategorySelected(categories[0]);
+                    }
                 },
             );
 
@@ -57,9 +60,9 @@ class App extends Component {
 
     onArticleSelected = (selectedArticle) => {
 
-        const { article } = this.state;
+        const {article} = this.state;
 
-        if(article && article.id === selectedArticle.id) return;
+        if (article && article.id === selectedArticle.id) return;
 
         this.setState(() => ({
             articleContent: {text: 'Loading...'},
@@ -112,4 +115,4 @@ App.propTypes = {
     firebase: PropTypes.object.isRequired,
 };
 
-export default withAuthentication(App);
+export default compose(withAuthentication, withErrorBoundaries)(App);

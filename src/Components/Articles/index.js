@@ -8,6 +8,9 @@ import {withFirebase} from '../Firebase';
 import * as PropTypes from 'prop-types';
 import './Article.css';
 import ReactMarkdown from 'react-markdown';
+import ListItemSecondaryAction from '@material-ui/core/es/ListItemSecondaryAction/ListItemSecondaryAction';
+import IconButton from '@material-ui/core/es/IconButton/IconButton';
+import {Delete} from '@material-ui/icons'
 
 const style = {
     Paper: {
@@ -47,6 +50,11 @@ class Articles extends React.Component {
                                         categoryArticles.map(item =>
                                             <ListItem key={item.id} button onClick={() => onArticleSelected(item)}>
                                                 <ListItemText primary={item.title}/>
+                                                <ListItemSecondaryAction>
+                                                    <IconButton>
+                                                        <Delete/>
+                                                    </IconButton>
+                                                </ListItemSecondaryAction>
                                             </ListItem>)
                                     }
                                 </List>
