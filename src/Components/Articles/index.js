@@ -10,7 +10,7 @@ import './Article.css';
 import ReactMarkdown from 'react-markdown';
 import ListItemSecondaryAction from '@material-ui/core/es/ListItemSecondaryAction/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/es/IconButton/IconButton';
-import {Delete} from '@material-ui/icons'
+import {Delete} from '@material-ui/icons';
 
 const style = {
     Paper: {
@@ -27,6 +27,16 @@ class Articles extends React.Component {
     createMarkup = (content) => ({
         __html: content,
     });
+
+    handleDelete = (article) => {
+
+        const {firebase, onArticleDeleted} = this.props;
+
+        console.log(article);
+        firebase.deleteArticle(article)
+            .then(() => onArticleDeleted())
+            .catch( e => {throw e;} );
+    };
 
     render() {
 
@@ -51,7 +61,7 @@ class Articles extends React.Component {
                                             <ListItem key={item.id} button onClick={() => onArticleSelected(item)}>
                                                 <ListItemText primary={item.title}/>
                                                 <ListItemSecondaryAction>
-                                                    <IconButton>
+                                                    <IconButton onClick={() => this.handleDelete(item)}>
                                                         <Delete/>
                                                     </IconButton>
                                                 </ListItemSecondaryAction>
@@ -87,6 +97,7 @@ Articles.propTypes = {
     categoryArticles: PropTypes.array,
     onArticleSelected: PropTypes.func.isRequired,
     articleContent: PropTypes.object,
+    onArticleDeleted: PropTypes.func,
 };
 
 export default withFirebase(Articles);

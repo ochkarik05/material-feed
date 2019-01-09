@@ -55,9 +55,8 @@ class App extends Component {
     };
 
     onCategorySelected = (currentCategory) => {
-        this.setState(() => {
-            return {currentCategory};
-        }, () => {
+        this.setState(() => ({currentCategory}),
+            () => {
 
             currentCategory.records.collection('records').get().then(snapshot => {
 
@@ -121,6 +120,7 @@ class App extends Component {
                 categoryArticles={articles}
                 onArticleSelected={this.onArticleSelected}
                 articleContent={articleContent}
+                onArticleDeleted={this.updateRecords}
             />
 
         </>;
