@@ -17,7 +17,7 @@ import {
 import AddArticle from './../../AddArticle';
 import {withFirebase} from '../../Firebase';
 import {compose} from 'recompose';
-import {instanceOf} from 'prop-types';
+import * as PropTypes from 'prop-types';
 
 const styles = theme => ({
     content: {
@@ -29,36 +29,36 @@ const WRONG_ID = '__WRONG_ID__';
 
 class CreateDialog extends Component {
 
-    categories = [
-        {categoryId: WRONG_ID, categoryName: 'New Category'},
-        {categoryId: 'news', categoryName: 'News'},
-        {categoryId: 'faq', categoryName: 'FAQ'},
-
-    ];
-
     state = {
         open: false,
         article: {
             title: '',
             image: '',
             description: '',
+            category: {},
             content: '',
-            category: this.categories[0],
         },
+        categories: [
+            {categoryId: WRONG_ID, categoryName: 'New Category'},
+        ],
     };
 
     onEnter = () => {
 
         this.props.firebase.getCategories().then(snapshot => {
 
-            const categories = [];
+            const categories = [
+                {categoryId: WRONG_ID, categoryName: 'New Category'},
+            ];
 
             snapshot.forEach(doc => {
                 let item = {id: doc.id, ...doc.data()};
-                categories.push(item);
+                categories.push(
+                    {categoryId: item.id, categoryName: item.title}
+                );
             });
-            console.log('Categories');
-            console.log(categories);
+
+            this.setState({categories});
         });
     };
 
@@ -77,10 +77,12 @@ class CreateDialog extends Component {
 
     getStateParam(name, value) {
 
+        const {categories} = this.state;
+
         if (name === 'categoryName') {
-            return {category: {...this.categories[0], categoryName: value}};
+            return {category: {...categories[0], categoryName: value}};
         } else if (name === 'category') {
-            return {category: this.categories.find((v) => v.categoryId === value)};
+            return {category: categories.find((v) => v.categoryId === value)};
         } else {
             return {[name]: value};
         }
@@ -102,22 +104,23 @@ class CreateDialog extends Component {
                 image,
                 description,
                 content,
-                category: {categoryId, categoryName},
+                category: {categoryId = WRONG_ID, categoryName = 'Create New'},
             },
         } = this.state;
 
         let promise;
 
         if (categoryId === WRONG_ID) {
-            promise = this.saveCategory(categoryName).then();
+            promise = this.saveCategory(categoryName);
         } else {
             promise = Promise.resolve(categoryId);
         }
 
         promise.then(categoryId =>
-            this.saveArticle(categoryId, title, image, description, content),
-        ).then(() => {
+            this.saveArticle(categoryId, title, image, description, content).then(() => categoryId),
+        ).then((categoryId) => {
             this.handleToggle();
+            this.props.onArticleCreate(categoryId);
         }).catch(e => {
             console.log(e);
         });
@@ -140,8 +143,9 @@ class CreateDialog extends Component {
                 image,
                 description,
                 content,
-                category: {categoryId, categoryName},
+                category: {categoryId = WRONG_ID, categoryName = 'Create New'},
             },
+            categories,
         } = this.state;
 
         const {classes} = this.props;
@@ -174,7 +178,7 @@ class CreateDialog extends Component {
                             onChange={this.handleChange('category')}
                             fullWidth
                         >
-                            {this.categories.map(cat =>
+                            {categories.map(cat =>
                                 <MenuItem key={cat.categoryId} value={cat.categoryId}>{cat.categoryName}</MenuItem>,
                             )}
                         </Select>
@@ -240,5 +244,9 @@ class CreateDialog extends Component {
     }
 
 }
+
+CreateDialog.propTypes = {
+    onArticleCreate: PropTypes.func.isRequired,
+};
 
 export default compose(withFirebase, withStyles(styles))(CreateDialog);

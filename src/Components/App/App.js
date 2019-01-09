@@ -12,8 +12,13 @@ class App extends Component {
         categories: [],
     };
 
-    componentDidMount() {
 
+    componentDidMount() {
+        this.updateRecords();
+
+    }
+
+    updateRecords = (categoryId) => {
         this.props.firebase.getCategories().then(snapshot => {
             const categories = [];
 
@@ -27,14 +32,27 @@ class App extends Component {
                 }),
                 () => {
                     if (categories.length > 0) {
-                        this.onCategorySelected(categories[0]);
+
+                        console.log(categories);
+                        console.log(categoryId);
+
+                        const index = categories.findIndex(c => c.id === categoryId);
+                        console.log(index);
+                        const indexActual = (index !== -1)? index:0;
+                        console.log(indexActual);
+                        let category = categories[indexActual];
+                        this.onCategorySelected(category);
+
                     }
                 },
             );
 
         });
+    };
 
-    }
+    handleArticleCreate = (categoryId) => {
+        this.updateRecords(categoryId)
+    };
 
     onCategorySelected = (currentCategory) => {
         this.setState(() => {
@@ -93,8 +111,7 @@ class App extends Component {
         return <>
 
             <Header
-                onSignInClick={this.handleOpen}
-                onSignOutClick={this.handleSignOut}
+                onArticleCreate={this.handleArticleCreate}
             />
 
             <Articles

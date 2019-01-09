@@ -8,6 +8,7 @@ import {
 
 import SignIn from './../SignIn';
 import Create from './../Articles/Dialogs/Create'
+import * as PropTypes from 'prop-types';
 
 const styles = () => ({
     root: {
@@ -22,7 +23,7 @@ const styles = () => ({
     },
 });
 
-const HeaderBase = ({ classes }) =>
+const HeaderBase = ({ classes, onArticleCreate }) =>
 
     <div className={classes.root}>
         <AppBar position="static" color="default">
@@ -32,12 +33,16 @@ const HeaderBase = ({ classes }) =>
                     Firebase News Feed
                 </Typography>
 
-                <Create />
+                <Create onArticleCreate={onArticleCreate}/>
 
                 <SignIn />
 
             </Toolbar>
         </AppBar>
     </div>;
+
+HeaderBase.propTypes = {
+    onArticleCreate: PropTypes.func.isRequired
+};
 
 export default withStyles(styles)(HeaderBase);
