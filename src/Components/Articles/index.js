@@ -5,7 +5,7 @@ import {
     ListItem,
     ListItemText,
     Paper,
-    withStyles
+    withStyles,
 } from '@material-ui/core';
 
 import Footer from './Footer';
@@ -62,18 +62,20 @@ class Articles extends React.Component {
                     <Grid
                         container
                         spacing={16}
-                        wrap={'nowrap'}
                         className={classes.container}
                     >
-                        <Grid item xs={2}>
-                            <Paper className={classes.paper}>
+                        <Grid item xs={12} sm={2}>
+                            <Paper className={classes.paper} xs={12} sm={2}>
                                 <List component="nav">
                                     {
                                         categoryArticles.map(item =>
                                             <ListItem key={item.id} button onClick={() => onArticleSelected(item)}>
                                                 <ListItemText primary={item.title}/>
                                                 <ListItemSecondaryAction>
-                                                    <IconButton onClick={() => this.handleDelete(item)}>
+                                                    <IconButton
+                                                        onClick={() => this.handleDelete(item)}
+                                                        disabled={!authUser}
+                                                    >
                                                         <Delete/>
                                                     </IconButton>
                                                 </ListItemSecondaryAction>
@@ -82,8 +84,8 @@ class Articles extends React.Component {
                                 </List>
                             </Paper>
                         </Grid>
-                        <Grid item xs={10}>
-                            <Paper className={classes.paper}>
+                        <Grid item  xs={12} sm={10}>
+                            <Paper className={classes.paper} xs={12} sm={10}>
                                 <ReactMarkdown
                                     source={text}
                                     className="article-content"
@@ -114,5 +116,5 @@ Articles.propTypes = {
 
 export default compose(
     withFirebase,
-    withStyles(styles)
+    withStyles(styles),
 )(Articles);
