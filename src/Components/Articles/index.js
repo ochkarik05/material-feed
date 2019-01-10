@@ -1,7 +1,13 @@
 import React from 'react';
-import {Grid, List, ListItem, ListItemText} from '@material-ui/core';
-import LeftPanel from './LeftPanel';
-import RightPanel from './RightPanel';
+import {
+    Grid,
+    List,
+    ListItem,
+    ListItemText,
+    Paper,
+    withStyles
+} from '@material-ui/core';
+
 import Footer from './Footer';
 import {AuthUserContext} from './../Session';
 import {withFirebase} from '../Firebase';
@@ -11,22 +17,22 @@ import ReactMarkdown from 'react-markdown';
 import ListItemSecondaryAction from '@material-ui/core/es/ListItemSecondaryAction/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/es/IconButton/IconButton';
 import {Delete} from '@material-ui/icons';
+import {compose} from 'recompose';
 
-const style = {
-    Paper: {
-        marginTop: '0.8em',
-        marginBottom: '0.8em',
-        height: 500,
+const styles = theme => ({
+    paper: {
+        height: '100%',
         overflow: 'auto',
     },
 
-};
+    container: {
+        flexGrow: 1,
+        padding: theme.spacing.unit,
+    },
+
+});
 
 class Articles extends React.Component {
-
-    createMarkup = (content) => ({
-        __html: content,
-    });
 
     handleDelete = (article) => {
 
@@ -41,6 +47,7 @@ class Articles extends React.Component {
     render() {
 
         const {
+            classes,
             categoryArticles,
             onArticleSelected,
             articleContent: {text} = {text: 'Select article from the left'},
@@ -52,9 +59,14 @@ class Articles extends React.Component {
             {authUser => {
                 console.log(authUser);
                 return <>
-                    <Grid container spacing={16} wrap={'nowrap'}>
+                    <Grid
+                        container
+                        spacing={16}
+                        wrap={'nowrap'}
+                        className={classes.container}
+                    >
                         <Grid item xs={2}>
-                            <LeftPanel style={style}>
+                            <Paper className={classes.paper}>
                                 <List component="nav">
                                     {
                                         categoryArticles.map(item =>
@@ -68,15 +80,15 @@ class Articles extends React.Component {
                                             </ListItem>)
                                     }
                                 </List>
-                            </LeftPanel>
+                            </Paper>
                         </Grid>
                         <Grid item xs={10}>
-                            <RightPanel style={style}>
+                            <Paper className={classes.paper}>
                                 <ReactMarkdown
                                     source={text}
                                     className="article-content"
                                 />
-                            </RightPanel>
+                            </Paper>
                         </Grid>
                     </Grid>
 
@@ -100,5 +112,7 @@ Articles.propTypes = {
     onArticleDeleted: PropTypes.func,
 };
 
-export default withFirebase(Articles);
-;
+export default compose(
+    withFirebase,
+    withStyles(styles)
+)(Articles);

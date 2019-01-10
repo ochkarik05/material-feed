@@ -25,7 +25,6 @@ const styles = () => ({
 
 const HeaderBase = ({ classes, onArticleCreate }) =>
 
-    <div className={classes.root}>
         <AppBar position="static" color="default">
             <Toolbar>
                 <Typography variant="h6" color="inherit" className={classes.grow}>
@@ -38,8 +37,7 @@ const HeaderBase = ({ classes, onArticleCreate }) =>
                 <SignIn />
 
             </Toolbar>
-        </AppBar>
-    </div>;
+        </AppBar>;
 
 HeaderBase.propTypes = {
     onArticleCreate: PropTypes.func.isRequired
