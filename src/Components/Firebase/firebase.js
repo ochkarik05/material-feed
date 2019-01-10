@@ -56,6 +56,11 @@ export default class {
 
     };
 
+    editArticle(categoryId, title, image, description, content, oldItem){
+        this.deleteArticle(oldItem)
+            .then(() => this.saveArticle(categoryId, title, image, description, content))
+    }
+
     deleteArticle = ({content, id, categoryId}) => content.delete()
         .then(() =>
             this.db.collection('records')

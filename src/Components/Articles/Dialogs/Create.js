@@ -31,7 +31,7 @@ class CreateDialog extends Component {
 
     state = {
         open: false,
-        article: {
+        article:{
             title: '',
             image: '',
             description: '',
@@ -45,7 +45,12 @@ class CreateDialog extends Component {
 
     onEnter = () => {
 
-        this.props.firebase.getCategories().then(snapshot => {
+        const {
+            firebase,
+            articleContent,
+        } = this.props;
+
+        firebase.getCategories().then(snapshot => {
 
             const categories = [
                 {categoryId: WRONG_ID, categoryName: 'New Category'},
@@ -54,11 +59,16 @@ class CreateDialog extends Component {
             snapshot.forEach(doc => {
                 let item = {id: doc.id, ...doc.data()};
                 categories.push(
-                    {categoryId: item.id, categoryName: item.title}
+                    {categoryId: item.id, categoryName: item.title},
                 );
             });
 
-            this.setState({categories});
+            this.setState(({article})=>({
+                    categories,
+                    oldArticle: {...articleContent},
+                    article: articleContent ? {...articleContent}: article
+                })
+            );
         });
     };
 

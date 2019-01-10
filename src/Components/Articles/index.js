@@ -21,14 +21,36 @@ import {compose} from 'recompose';
 
 const styles = theme => ({
     paper: {
-        height: '100%',
         overflow: 'auto',
     },
 
     container: {
         flexGrow: 1,
         padding: theme.spacing.unit,
+        display: 'flex',
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column',
+        },
+        overflow: 'hidden'
     },
+
+    items: {
+        minHeight: '8em',
+        minWidth: '30%'
+    },
+
+    content: {
+        flexGrow: 1,
+
+        [theme.breakpoints.down('sm')]: {
+            marginTop: theme.spacing.unit,
+        },
+        [theme.breakpoints.up('md')]: {
+            marginLeft: theme.spacing.unit,
+        },
+
+    },
+
 
 });
 
@@ -41,7 +63,9 @@ class Articles extends React.Component {
         console.log(article);
         firebase.deleteArticle(article)
             .then(() => onArticleDeleted())
-            .catch( e => {throw e;} );
+            .catch(e => {
+                throw e;
+            });
     };
 
     render() {
@@ -59,41 +83,32 @@ class Articles extends React.Component {
             {authUser => {
                 console.log(authUser);
                 return <>
-                    <Grid
-                        container
-                        spacing={16}
-                        className={classes.container}
-                    >
-                        <Grid item xs={12} sm={2}>
-                            <Paper className={classes.paper} xs={12} sm={2}>
-                                <List component="nav">
-                                    {
-                                        categoryArticles.map(item =>
-                                            <ListItem key={item.id} button onClick={() => onArticleSelected(item)}>
-                                                <ListItemText primary={item.title}/>
-                                                <ListItemSecondaryAction>
-                                                    <IconButton
-                                                        onClick={() => this.handleDelete(item)}
-                                                        disabled={!authUser}
-                                                    >
-                                                        <Delete/>
-                                                    </IconButton>
-                                                </ListItemSecondaryAction>
-                                            </ListItem>)
-                                    }
-                                </List>
-                            </Paper>
-                        </Grid>
-                        <Grid item  xs={12} sm={10}>
-                            <Paper className={classes.paper} xs={12} sm={10}>
-                                <ReactMarkdown
-                                    source={text}
-                                    className="article-content"
-                                />
-                            </Paper>
-                        </Grid>
-                    </Grid>
-
+                    <div className={classes.container}>
+                        <Paper className={[classes.paper, classes.items]}>
+                            <List component="nav">
+                                {
+                                    categoryArticles.map(item =>
+                                        <ListItem key={item.id} button onClick={() => onArticleSelected(item)}>
+                                            <ListItemText primary={item.title}/>
+                                            <ListItemSecondaryAction>
+                                                <IconButton
+                                                    onClick={() => this.handleDelete(item)}
+                                                    disabled={!authUser}
+                                                >
+                                                    <Delete/>
+                                                </IconButton>
+                                            </ListItemSecondaryAction>
+                                        </ListItem>)
+                                }
+                            </List>
+                        </Paper>
+                        <Paper className={[classes.paper, classes.content]}>
+                            <ReactMarkdown
+                                source={text}
+                                className="article-content"
+                            />
+                        </Paper>
+                    </div>
                     < Footer {...this.props}/>
                 </>;
             }
