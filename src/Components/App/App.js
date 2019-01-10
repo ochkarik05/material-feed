@@ -5,6 +5,21 @@ import withAuthentication from '../Session/withAuthentication';
 import {compose} from 'recompose';
 import * as PropTypes from 'prop-types';
 import {withErrorBoundaries} from '../ErrorBoundary';
+import {withStyles} from '@material-ui/core';
+
+const styles = {
+    '@global': {
+        '#root': {
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            display: 'flex',
+            flexDirection: 'column'
+        }
+    }
+};
 
 class App extends Component {
 
@@ -55,9 +70,8 @@ class App extends Component {
     };
 
     onCategorySelected = (currentCategory) => {
-        this.setState(() => {
-            return {currentCategory};
-        }, () => {
+        this.setState(() => ({currentCategory}),
+            () => {
 
             currentCategory.records.collection('records').get().then(snapshot => {
 
@@ -121,6 +135,7 @@ class App extends Component {
                 categoryArticles={articles}
                 onArticleSelected={this.onArticleSelected}
                 articleContent={articleContent}
+                onArticleDeleted={this.updateRecords}
             />
 
         </>;
@@ -132,4 +147,8 @@ App.propTypes = {
     firebase: PropTypes.object.isRequired,
 };
 
-export default compose(withAuthentication, withErrorBoundaries)(App);
+export default compose(
+    withAuthentication,
+    withErrorBoundaries,
+    withStyles(styles)
+    )(App);

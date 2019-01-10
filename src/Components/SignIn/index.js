@@ -27,6 +27,7 @@ const styles = theme => ({
             right: '20%',
             position: 'fixed',
             padding: '1.3em',
+            overflow: 'auto',
         },
 
         textField: {

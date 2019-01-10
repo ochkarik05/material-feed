@@ -11,7 +11,6 @@ const config = {
     messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
 };
 
-
 const settings = {timestampsInSnapshots: true};
 
 export default class {
@@ -42,7 +41,8 @@ export default class {
 
     saveArticle = (categoryId, title, image, description, content) => {
         const {db} = this;
-        return db.collection('articlesContent').add({text: content, categoryId: categoryId})
+        return db.collection('articlesContent')
+            .add({text: content, categoryId: categoryId})
             .then(docRef =>
                 db.collection('records')
                     .doc(categoryId).collection('records')
@@ -51,8 +51,18 @@ export default class {
                         description: description,
                         image: image,
                         content: docRef,
-                        categoryId: categoryId
-                    }))
+                        categoryId: categoryId,
+                    }));
 
     };
+
+    deleteArticle = ({content, id, categoryId}) => content.delete()
+        .then(() =>
+            this.db.collection('records')
+                .doc(categoryId)
+                .collection('records')
+                .doc(id)
+                .delete(),
+        );
+
 }
