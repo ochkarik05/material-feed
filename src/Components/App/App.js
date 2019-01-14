@@ -16,17 +16,17 @@ const styles = {
             top: 0,
             bottom: 0,
             display: 'flex',
-            flexDirection: 'column'
-        }
-    }
+            flexDirection: 'column',
+        },
+    },
 };
 
 class App extends Component {
 
     state = {
         categories: [],
+        createDialogOpen: false,
     };
-
 
     componentDidMount() {
         this.updateRecords();
@@ -47,14 +47,8 @@ class App extends Component {
                 }),
                 () => {
                     if (categories.length > 0) {
-
-                        console.log(categories);
-                        console.log(categoryId);
-
                         const index = categories.findIndex(c => c.id === categoryId);
-                        console.log(index);
-                        const indexActual = (index !== -1)? index:0;
-                        console.log(indexActual);
+                        const indexActual = (index !== -1) ? index : 0;
                         let category = categories[indexActual];
                         this.onCategorySelected(category);
 
@@ -66,28 +60,36 @@ class App extends Component {
     };
 
     handleArticleCreate = (categoryId) => {
-        this.updateRecords(categoryId)
+        this.updateRecords(categoryId);
+    };
+
+    toggleArticleDialog = () => {
+
+        console.log('toggleArticleDialog');
+        this.setState(prevState => ({
+            createDialogOpen: !prevState.createDialogOpen,
+        }));
     };
 
     onCategorySelected = (currentCategory) => {
         this.setState(() => ({currentCategory}),
             () => {
 
-            currentCategory.records.collection('records').get().then(snapshot => {
+                currentCategory.records.collection('records').get().then(snapshot => {
 
-                const articles = [];
+                    const articles = [];
 
-                snapshot.forEach(doc => {
-                    let item = {id: doc.id, ...doc.data()};
-                    articles.push(item);
+                    snapshot.forEach(doc => {
+                        let item = {id: doc.id, ...doc.data()};
+                        articles.push(item);
+                    });
+
+                    this.setState({
+                        articles: articles,
+                    });
+
                 });
-
-                this.setState({
-                    articles: articles,
-                });
-
             });
-        });
     };
 
     onArticleSelected = (selectedArticle) => {
@@ -120,12 +122,15 @@ class App extends Component {
             currentCategory,
             articles = [],
             articleContent,
+            createDialogOpen,
         } = this.state;
 
         return <>
 
             <Header
                 onArticleCreate={this.handleArticleCreate}
+                onCreateToggle={this.toggleArticleDialog}
+                onCreateOpen={createDialogOpen}
             />
 
             <Articles
@@ -150,5 +155,5 @@ App.propTypes = {
 export default compose(
     withAuthentication,
     withErrorBoundaries,
-    withStyles(styles)
-    )(App);
+    withStyles(styles),
+)(App);

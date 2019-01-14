@@ -1,5 +1,5 @@
 import React from 'react';
-import {Tabs, Tab, withStyles, withWidth} from '@material-ui/core';
+import {Tabs, Tab, withStyles, } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {compose} from 'recompose';
 
@@ -17,7 +17,7 @@ class Footer extends React.Component {
 
     render() {
 
-        const {categories, category, classes, width} = this.props;
+        const {categories, category, classes, } = this.props;
 
         const cellIndex = categories.findIndex(cat => cat === category);
 
@@ -27,8 +27,7 @@ class Footer extends React.Component {
                 onChange={this.handleChange}
                 indicatorColor="primary"
                 textColor="primary"
-                scrollable={width === 'sm' || width === 'xs'}
-                centered={width !== 'sm' || width !== 'xs'}
+                scrollable
             >
                 {categories && categories.map(
                     cat => <Tab key={cat.id} label={cat.title}/>,
@@ -46,4 +45,4 @@ Footer.propTypes = {
     currentCategory: PropTypes.object
 };
 
-export default compose(withStyles(styles), withWidth())(Footer);
+export default compose(withStyles(styles))(Footer);

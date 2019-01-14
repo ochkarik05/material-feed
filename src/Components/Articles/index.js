@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    Grid,
     List,
     ListItem,
     ListItemText,
@@ -16,14 +15,13 @@ import './Article.css';
 import ReactMarkdown from 'react-markdown';
 import ListItemSecondaryAction from '@material-ui/core/es/ListItemSecondaryAction/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/es/IconButton/IconButton';
-import {Delete} from '@material-ui/icons';
+import {Delete, Edit} from '@material-ui/icons';
 import {compose} from 'recompose';
 
 const styles = theme => ({
     paper: {
         overflow: 'auto',
     },
-
     container: {
         flexGrow: 1,
         padding: theme.spacing.unit,
@@ -31,12 +29,12 @@ const styles = theme => ({
         [theme.breakpoints.down('sm')]: {
             flexDirection: 'column',
         },
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
 
     items: {
         minHeight: '8em',
-        minWidth: '30%'
+        minWidth: '30%',
     },
 
     content: {
@@ -50,7 +48,6 @@ const styles = theme => ({
         },
 
     },
-
 
 });
 
@@ -66,6 +63,12 @@ class Articles extends React.Component {
             .catch(e => {
                 throw e;
             });
+    };
+
+    handleEdit = (article) => {
+
+        console.log(article)
+
     };
 
     render() {
@@ -84,13 +87,19 @@ class Articles extends React.Component {
                 console.log(authUser);
                 return <>
                     <div className={classes.container}>
-                        <Paper className={[classes.paper, classes.items]}>
+                        <Paper className={`${classes.paper}, ${classes.items }`}>
                             <List component="nav">
                                 {
                                     categoryArticles.map(item =>
                                         <ListItem key={item.id} button onClick={() => onArticleSelected(item)}>
                                             <ListItemText primary={item.title}/>
                                             <ListItemSecondaryAction>
+                                                <IconButton
+                                                    onClick={() => this.handleEdit(item)}
+                                                    disabled={!authUser}
+                                                >
+                                                    <Edit/>
+                                                </IconButton>
                                                 <IconButton
                                                     onClick={() => this.handleDelete(item)}
                                                     disabled={!authUser}
@@ -102,7 +111,7 @@ class Articles extends React.Component {
                                 }
                             </List>
                         </Paper>
-                        <Paper className={[classes.paper, classes.content]}>
+                        <Paper className={`${classes.paper}, ${classes.content }`}>
                             <ReactMarkdown
                                 source={text}
                                 className="article-content"

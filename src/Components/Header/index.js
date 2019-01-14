@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core';
 
 import SignIn from './../SignIn';
-import Create from './../Articles/Dialogs/Create'
+import Create from '../Articles/Dialogs/Create';
 import * as PropTypes from 'prop-types';
 
 const styles = () => ({
@@ -23,24 +23,40 @@ const styles = () => ({
     },
 });
 
-const HeaderBase = ({ classes, onArticleCreate }) =>
+const HeaderBase = ({classes, onArticleCreate, onCreateOpen, onCreateToggle}) =>
 
-        <AppBar position="static" color="default">
-            <Toolbar>
-                <Typography variant="h6" color="inherit" className={classes.grow}>
-                    {console.log(classes)}
-                    Firebase News Feed
-                </Typography>
+    <AppBar position="static" color="default">
+        <Toolbar>
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+                {console.log(classes)}
+                Firebase News Feed
+            </Typography>
 
-                <Create onArticleCreate={onArticleCreate}/>
+            <Create
+                onArticleCreate={onArticleCreate}
+                handleToggle={onCreateToggle}
+                open={onCreateOpen}
+            />
 
-                <SignIn />
+            <SignIn/>
 
-            </Toolbar>
-        </AppBar>;
+        </Toolbar>
+    </AppBar>;
 
 HeaderBase.propTypes = {
-    onArticleCreate: PropTypes.func.isRequired
+    onArticleCreate: PropTypes.func.isRequired,
+    onCreateOpen: PropTypes.bool.isRequired,
+    onCreateToggle: PropTypes.func.isRequired,
+    classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(HeaderBase);
+let Header = withStyles(styles)(HeaderBase);
+
+
+Header.propTypes = {
+    onArticleCreate: PropTypes.func.isRequired,
+    onCreateOpen: PropTypes.bool.isRequired,
+    onCreateToggle: PropTypes.func.isRequired,
+};
+
+export default Header;
