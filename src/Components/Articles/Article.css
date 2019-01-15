@@ -1,29 +1,29 @@
 
 .article-content {
-    overflow: auto;
-    margin: 1em;
-    font-family: sans-serif;
+  overflow: auto;
+  margin: 1em;
+  font-family: sans-serif;
 }
 
 .article-content img {
-    float: right;
-    width: 20em;
-    margin-left: 1em;
-    margin-bottom: 1em;
+  float: right;
+  width: 20em;
+  margin-left: 1em;
+  margin-bottom: 1em;
 }
 
 .article-content ul {
-    list-style-type: none;
-    overflow: hidden;
+  list-style-type: none;
+  overflow: hidden;
 }
 
 .article-content a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .article-content ol {
-    padding-left: 3em;
-    overflow: hidden;
-    margin: 1em;
+  padding-left: 3em;
+  overflow: hidden;
+  margin: 1em;
 }
 

@@ -7,16 +7,16 @@ const SignButton = ({authorized, onSignClick}) => <Button color="inherit"
 
 export default withAuthorization(({onSignInClick, onSignOutClick, authUser}) => {
 
-        const authorized = !!authUser;
+    const authorized = !!authUser;
 
-        const callback = authorized ? onSignOutClick : onSignInClick;
-        return <>
-            <SignButton
-                onSignClick={callback}
-                authorized={authorized}
-            />
-        </>;
-    },
+    const callback = authorized ? onSignOutClick : onSignInClick;
+    return <>
+      <SignButton
+        onSignClick={callback}
+        authorized={authorized}
+      />
+    </>;
+  },
 );
 
 

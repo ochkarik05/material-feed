@@ -1,27 +1,19 @@
 import React from 'react';
-import AddArticle from './../../AddArticle';
-import ArticleDialog from './ArticleDialog';
+import AddArticle from './AddButton';
 import * as PropTypes from 'prop-types';
 
 const CreateDialog = props => {
 
-    const { handleToggle, open, onArticleCreate } = props;
+  const {handleToggle} = props;
 
-    return <>
-        <AddArticle onClick={handleToggle}/>
-        <ArticleDialog
-            open={open}
-            handleToggle={handleToggle}
-            onArticleCreate={onArticleCreate}
-        />
-    </>;
+  return <>
+    <AddArticle onClick={handleToggle}/>
+  </>;
 
 };
 
 CreateDialog.propTypes = {
-
-    handleToggle: PropTypes.func.isRequired,
-    open: PropTypes.bool.isRequired,
+  handleToggle: PropTypes.func.isRequired,
 
 };
 
