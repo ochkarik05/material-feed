@@ -6,149 +6,158 @@ import {compose} from 'recompose';
 import * as PropTypes from 'prop-types';
 import {withErrorBoundaries} from '../ErrorBoundary';
 import {withStyles} from '@material-ui/core';
+import ArticleDialog from '../Articles/Dialogs/ArticleDialog';
 
 const styles = {
-    '@global': {
-        '#root': {
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-            display: 'flex',
-            flexDirection: 'column'
-        }
-    }
+  '@global': {
+    '#root': {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      display: 'flex',
+      flexDirection: 'column',
+    },
+  },
 };
 
 class App extends Component {
 
-    state = {
-        categories: [],
-    };
+  state = {
+    categories: [],
+    createDialogOpen: false,
+  };
 
+  componentDidMount() {
+    this.updateRecords();
 
-    componentDidMount() {
-        this.updateRecords();
+  }
 
-    }
+  updateRecords = (categoryId) => {
+    this.props.firebase.getCategories().then(snapshot => {
+      const categories = [];
 
-    updateRecords = (categoryId) => {
-        this.props.firebase.getCategories().then(snapshot => {
-            const categories = [];
+      snapshot.forEach(doc => {
+        let item = {id: doc.id, ...doc.data()};
+        categories.push(item);
+      });
 
-            snapshot.forEach(doc => {
-                let item = {id: doc.id, ...doc.data()};
-                categories.push(item);
-            });
+      this.setState(() => ({
+          categories: categories,
+        }),
+        () => {
+          if (categories.length > 0) {
+            const index = categories.findIndex(c => c.id === categoryId);
+            const indexActual = (index !== -1) ? index : 0;
+            let category = categories[indexActual];
+            this.onCategorySelected(category);
 
-            this.setState(() => ({
-                    categories: categories,
-                }),
-                () => {
-                    if (categories.length > 0) {
+          }
+        },
+      );
 
-                        console.log(categories);
-                        console.log(categoryId);
+    });
+  };
 
-                        const index = categories.findIndex(c => c.id === categoryId);
-                        console.log(index);
-                        const indexActual = (index !== -1)? index:0;
-                        console.log(indexActual);
-                        let category = categories[indexActual];
-                        this.onCategorySelected(category);
+  handleArticleCreate = (categoryId) => {
+    this.updateRecords(categoryId);
+  };
 
-                    }
-                },
-            );
+  toggleArticleDialog = () => {
+
+    console.log('toggleArticleDialog');
+    this.setState(prevState => ({
+      createDialogOpen: !prevState.createDialogOpen,
+    }));
+  };
+
+  onCategorySelected = (currentCategory) => {
+    this.setState(() => ({currentCategory}),
+      () => {
+
+        currentCategory.records.collection('records').get().then(snapshot => {
+
+          const articles = [];
+
+          snapshot.forEach(doc => {
+            let item = {id: doc.id, ...doc.data()};
+            articles.push(item);
+          });
+
+          this.setState({
+            articles: articles,
+          });
 
         });
-    };
+      });
+  };
 
-    handleArticleCreate = (categoryId) => {
-        this.updateRecords(categoryId)
-    };
+  onArticleSelected = (selectedArticle) => {
 
-    onCategorySelected = (currentCategory) => {
-        this.setState(() => ({currentCategory}),
-            () => {
+    const {article} = this.state;
 
-            currentCategory.records.collection('records').get().then(snapshot => {
+    if (article && article.id === selectedArticle.id) return;
 
-                const articles = [];
+    this.setState(() => ({
+      articleContent: {text: 'Loading...'},
+      article: selectedArticle,
+    }), () => {
+      selectedArticle.content.get().then(content => {
 
-                snapshot.forEach(doc => {
-                    let item = {id: doc.id, ...doc.data()};
-                    articles.push(item);
-                });
+        const text = content.data().text.replace(/\\n/g, '\n');
+        // console.log(text);
 
-                this.setState({
-                    articles: articles,
-                });
-
-            });
+        this.setState({
+          articleContent: {text: text},
         });
-    };
+      });
+    });
 
-    onArticleSelected = (selectedArticle) => {
+  };
 
-        const {article} = this.state;
+  render() {
 
-        if (article && article.id === selectedArticle.id) return;
+    const {
+      categories,
+      currentCategory,
+      articles = [],
+      articleContent,
+      createDialogOpen,
+    } = this.state;
 
-        this.setState(() => ({
-            articleContent: {text: 'Loading...'},
-            article: selectedArticle,
-        }), () => {
-            selectedArticle.content.get().then(content => {
+    return <>
 
-                const text = content.data().text.replace(/\\n/g, '\n');
-                // console.log(text);
+      <Header
+        onCreateToggle={this.toggleArticleDialog}
+      />
 
-                this.setState({
-                    articleContent: {text: text},
-                });
-            });
-        });
+      <Articles
+        categories={categories}
+        onCategorySelected={this.onCategorySelected}
+        category={currentCategory}
+        categoryArticles={articles}
+        onArticleSelected={this.onArticleSelected}
+        articleContent={articleContent}
+        onArticleDeleted={this.updateRecords}
+      />
 
-    };
-
-    render() {
-
-        const {
-            categories,
-            currentCategory,
-            articles = [],
-            articleContent,
-        } = this.state;
-
-        return <>
-
-            <Header
-                onArticleCreate={this.handleArticleCreate}
-            />
-
-            <Articles
-                categories={categories}
-                onCategorySelected={this.onCategorySelected}
-                category={currentCategory}
-                categoryArticles={articles}
-                onArticleSelected={this.onArticleSelected}
-                articleContent={articleContent}
-                onArticleDeleted={this.updateRecords}
-            />
-
-        </>;
-    }
+      <ArticleDialog
+        open={createDialogOpen}
+        handleToggle={this.toggleArticleDialog}
+        onArticleCreate={this.handleArticleCreate}
+      />
+    </>;
+  }
 
 }
 
 App.propTypes = {
-    firebase: PropTypes.object.isRequired,
+  firebase: PropTypes.object.isRequired,
 };
 
 export default compose(
-    withAuthentication,
-    withErrorBoundaries,
-    withStyles(styles)
-    )(App);
+  withAuthentication,
+  withErrorBoundaries,
+  withStyles(styles),
+)(App);
