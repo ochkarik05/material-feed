@@ -1,36 +1,23 @@
 import React, {Component} from 'react';
-import Header from '../Header';
-import Articles from '../Articles';
 import withAuthentication from '../Session/withAuthentication';
 import {compose} from 'recompose';
 import * as PropTypes from 'prop-types';
 import {withErrorBoundaries} from '../ErrorBoundary';
 import {withStyles} from '@material-ui/core';
-import ArticleDialog from '../Articles/Dialogs/ArticleDialog';
+import {BrowserRouter as Router, NavLink, Redirect, Route, Switch} from 'react-router-dom';
+import * as ROUTES from '../../Constants/routes';
+import Admin from '../Admin';
 
-const styles = {
-  '@global': {
-    '#root': {
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      top: 0,
-      bottom: 0,
-      display: 'flex',
-      flexDirection: 'column',
-    },
-  },
+const styles = theme => {
+
 };
 
 class App extends Component {
 
-  state = {
-    categories: [],
-    createDialogOpen: false,
-  };
+  state = {};
 
   componentDidMount() {
-    this.updateRecords();
+    // this.updateRecords();
 
   }
 
@@ -72,27 +59,6 @@ class App extends Component {
     }));
   };
 
-  onCategorySelected = (currentCategory) => {
-    this.setState(() => ({currentCategory}),
-      () => {
-
-        currentCategory.records.collection('records').get().then(snapshot => {
-
-          const articles = [];
-
-          snapshot.forEach(doc => {
-            let item = {id: doc.id, ...doc.data()};
-            articles.push(item);
-          });
-
-          this.setState({
-            articles: articles,
-          });
-
-        });
-      });
-  };
-
   onArticleSelected = (selectedArticle) => {
 
     const {article} = this.state;
@@ -106,7 +72,6 @@ class App extends Component {
       selectedArticle.content.get().then(content => {
 
         const text = content.data().text.replace(/\\n/g, '\n');
-        // console.log(text);
 
         this.setState({
           articleContent: {text: text},
@@ -118,36 +83,31 @@ class App extends Component {
 
   render() {
 
-    const {
-      categories,
-      currentCategory,
-      articles = [],
-      articleContent,
-      createDialogOpen,
-    } = this.state;
+    return <Router>
 
-    return <>
+      <Switch>
 
-      <Header
-        onCreateToggle={this.toggleArticleDialog}
-      />
+        <Route exact path={ROUTES.HOME} render={() => <h1>Articles</h1>}/>
 
-      <Articles
-        categories={categories}
-        onCategorySelected={this.onCategorySelected}
-        category={currentCategory}
-        categoryArticles={articles}
-        onArticleSelected={this.onArticleSelected}
-        articleContent={articleContent}
-        onArticleDeleted={this.updateRecords}
-      />
+        <Route path={ROUTES.ADMIN} render={() => <Admin/>}/>
 
-      <ArticleDialog
-        open={createDialogOpen}
-        handleToggle={this.toggleArticleDialog}
-        onArticleCreate={this.handleArticleCreate}
-      />
-    </>;
+        <Route path={ROUTES.ARTICLE} render={({match: {params: {articleId}}}) => {
+          console.log(articleId);
+          return <h1>Article</h1>;
+        }}/>
+
+        <Route path={ROUTES.NOT_FOUND} render={() => {
+          return <>
+            <h1>Not Found</h1>
+            <NavLink to={ROUTES.HOME}>Home</NavLink>
+          </>;
+        }}/>
+
+        <Route render={() => <Redirect to={ROUTES.NOT_FOUND}/>}/>
+
+      </Switch>
+
+    </Router>;
   }
 
 }
@@ -161,3 +121,4 @@ export default compose(
   withErrorBoundaries,
   withStyles(styles),
 )(App);
+
