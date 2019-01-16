@@ -7,6 +7,8 @@ import {withStyles} from '@material-ui/core';
 import {BrowserRouter as Router, NavLink, Redirect, Route, Switch} from 'react-router-dom';
 import * as ROUTES from '../../Constants/routes';
 import Admin from '../Admin';
+import {withApiProvider} from '../Api';
+import ArticleList from '../AticleList';
 
 const styles = theme => {
 
@@ -87,7 +89,7 @@ class App extends Component {
 
       <Switch>
 
-        <Route exact path={ROUTES.HOME} render={() => <h1>Articles</h1>}/>
+        <Route exact path={ROUTES.HOME} render={() => <ArticleList/>}/>
 
         <Route path={ROUTES.ADMIN} render={() => <Admin/>}/>
 
@@ -117,8 +119,9 @@ App.propTypes = {
 };
 
 export default compose(
-  withAuthentication,
   withErrorBoundaries,
+  withApiProvider,
+  // withAuthentication,
   withStyles(styles),
 )(App);
 
