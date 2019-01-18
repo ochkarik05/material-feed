@@ -1,6 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/database';
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -18,8 +19,9 @@ export default class {
     app.initializeApp(config);
     this.auth = app.auth();
     this.app = app;
-    this.db = app.firestore();
-    this.db.settings(settings);
+    this.firestore = app.firestore();
+    this.firestore.settings(settings);
+    this.database = app.database();
   }
 
   signOut = () => this.auth.signOut().then(() => {
@@ -28,23 +30,23 @@ export default class {
 
   signIn = (email, password) => this.auth.signInWithEmailAndPassword(email, password);
 
-  getCategories = () => this.db.collection('categories').get();
+  getCategories = () => this.firestore.collection('categories').get();
   getArticles = (ref) => ref.get();
 
   addCategory = (categoryName) => {
-    const ref = this.db.collection('records').doc();
-    return this.db.collection('categories').doc(ref.id).set({
+    const ref = this.firestore.collection('records').doc();
+    return this.firestore.collection('categories').doc(ref.id).set({
       title: categoryName,
       records: ref,
     }).then(() => ref.id);
   };
 
   saveArticle = (categoryId, title, image, description, content) => {
-    const {db} = this;
-    return db.collection('articlesContent')
+    const {firestore} = this;
+    return firestore.collection('articlesContent')
       .add({text: content, categoryId: categoryId})
       .then(docRef =>
-        db.collection('records')
+        firestore.collection('records')
           .doc(categoryId).collection('records')
           .add({
             title: title,
@@ -63,7 +65,7 @@ export default class {
 
   deleteArticle = ({content, id, categoryId}) => content.delete()
     .then(() =>
-      this.db.collection('records')
+      this.firestore.collection('records')
         .doc(categoryId)
         .collection('records')
         .doc(id)

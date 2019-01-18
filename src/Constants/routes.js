@@ -5,3 +5,5 @@ export const CREATE = '/create';
 export const EDIT = '/edit/:articleId';
 export const DELETE = '/delete/:articleId';
 export const NOT_FOUND = '/404';
+export const SIGN_IN = '/signIn';
+export const SIGN_OUT = '/signOut';

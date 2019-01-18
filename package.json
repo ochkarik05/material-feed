@@ -9,11 +9,12 @@
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
+    "react-firebaseui": "^3.1.2",
     "react-markdown": "^4.0.6",
+    "react-router": "latest",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.2",
-    "recompose": "^0.30.0",
-    "react-router": "latest"
+    "recompose": "^0.30.0"
   },
   "scripts": {
     "start": "react-scripts start",
