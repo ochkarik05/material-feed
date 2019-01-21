@@ -3,7 +3,6 @@ import getProvider from './providers';
 import React from 'react';
 import config from '../../config';
 import {API} from './api';
-import {instanceOf} from 'prop-types';
 
 const apiProvider = provider => Component => props =>
   <ApiProvider value={getProvider(provider)}>
@@ -17,10 +16,10 @@ export const withApi = Component => props => <ApiConsumer>
     console.log('withApi');
     console.log((apiProvider instanceof API));
 
-    if(apiProvider instanceof API){
+    if (apiProvider instanceof API) {
       return <Component {...props} api={apiProvider}/>;
-    }else{
-        throw new Error('Wrong provider')
+    } else {
+      throw new Error('Wrong provider');
     }
 
   }
