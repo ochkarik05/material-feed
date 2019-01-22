@@ -1,8 +1,8 @@
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import * as ROUTES from '../../Constants/routes';
-import firebase from 'firebase';
 import {withFirebase} from '../Firebase';
+import firebase from 'firebase/app'
 
 const FirebaseUi = (props) => {
 

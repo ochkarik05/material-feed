@@ -1,7 +1,8 @@
 import app from 'firebase/app';
-import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/database';
+import 'firebase/auth';
+import 'firebase/storage';
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -22,6 +23,7 @@ export default class {
     this.firestore = app.firestore();
     this.firestore.settings(settings);
     this.database = app.database();
+    this.storage = app.storage();
   }
 
   signOut = () => this.auth.signOut().then(() => {
