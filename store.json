@@ -1,0 +1,80 @@
+{
+  "categories": [
+    {
+      "id": "news",
+      "name": "News"
+    },
+    {
+      "id": "tutorials",
+      "name": "Tutorials"
+    },
+    {
+      "id": "faq",
+      "name": "FAQ (Frequently Asked Questions)"
+    }
+  ],
+  "articles": [
+    {
+      "id": "test-article-1",
+      "title": "Test Article 1",
+      "description": "Test article 1 description",
+      "articleContentId": 1,
+      "categoryId": "news"
+    },
+    {
+      "id": "test-article-2",
+      "title": "Test Article 1",
+      "description": "Lorem ipsum dolor sit amet, ea eum brute iusto instructior. His labore instructior ea, an vix vero accusam hendrerit, duo.",
+      "articleContentId": 2,
+      "categoryId": "tutorials"
+    },
+    {
+      "id": "test-article-3",
+      "title": "Test Article 1",
+      "description": "Essent integre omnesque eu mea, vim et prima pericula ullamcorper. Ei qui porro gloriatur. Vis te officiis recteque, postea iracundia.",
+      "articleContentId": 3,
+      "categoryId": "faq"
+    },
+    {
+      "id": "test-article-4",
+      "title": "Test Article 1",
+      "description": "Ridens conceptam dissentiunt per ei, propriae theophrastus per cu. His id fugit feugiat. Ut sit sint molestie adolescens, quo errem.",
+      "articleContentId": 4,
+      "categoryId": "news"
+    },
+    {
+      "id": "test-article-6",
+      "title": "Test Article 6",
+      "description": "Lorem ipsum dolor sit amet, ea eum brute iusto instructior. His labore instructior ea, an vix vero accusam hendrerit, duo.",
+      "articleContentId": 2,
+      "categoryId": "tutorials"
+    }
+  ],
+  "articleContents": [
+    {
+      "id": 1,
+      "articleId": "test-article-1",
+      "content": "Lorem ipsum dolor sit amet, ei omnes percipit cum, nam ut deleniti vivendum, mei ex vidisse maiestatis adversarium. Duo no facete latine. Quod reprimique id cum. Cu aeque sadipscing sit, ea sea saperet scaevola. Eam debet utinam no, quis nostrud omittam per te."
+    },
+    {
+      "id": 2,
+      "articleId": "test-article-2",
+      "content": "Cu quo commune prodesset vituperatoribus, vel ne maiorum reprehendunt, appetere inimicus comprehensam mel an. Atqui audiam vis ea, elit tritani eripuit eu vel. Sea diam aliquip splendide eu, in verear fastidii necessitatibus eum, everti iisque tincidunt quo at. Case movet ea pro. Vix id duis forensibus, dolorum dissentias accommodare ne vim. Nec vide ferri ipsum ad, cum in viris qualisque."
+    },
+    {
+      "id": 3,
+      "articleId": "test-article-3",
+      "content": "Dico graecis consequuntur usu ex, facilisis rationibus repudiandae est ei, idque tantas explicari mei at. Pri te facete moderatius cotidieque. Cum ex propriae praesent, vide utroque principes et nam. Habeo appareat vulputate his in. Eam an commodo noluisse consetetur."
+    },
+    {
+      "id": 4,
+      "articleId": "test-article-4",
+      "content": "Movet oratio sea cu, nobis facilisi temporibus eu has. Ad mei putant adipisci partiendo, eos ad vitae oportere deseruisse. Sed ne enim erroribus, mei inani mundi nihil ne, mea no audire nostrum. An ceteros sensibus per, eam id elitr aeterno consequat. Eum ea latine aliquando persecuti, id discere voluptatum vel, aliquando gloriatur definitionem ius ne."
+    },
+    {
+      "articleId": "test-article-5",
+      "content": "Some content",
+      "id": 8
+    }
+  ]
+}

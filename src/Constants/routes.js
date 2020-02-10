@@ -1,0 +1,9 @@
+export const HOME = '/';
+export const ADMIN = '/admin';
+export const ARTICLE = '/article/:articleId';
+export const CREATE = '/admin/create';
+export const EDIT = '/admin/edit/:articleId';
+export const DELETE = '/admin/delete/:articleId';
+export const NOT_FOUND = '/404';
+export const SIGN_IN = '/signIn';
+export const SIGN_OUT = '/signOut';
